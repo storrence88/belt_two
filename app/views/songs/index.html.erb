@@ -1,0 +1,49 @@
+<br>
+<h1>Hello, <%= current_user.first_name %> <%= current_user.last_name %>!</h1>
+<br>
+<h4>All of the songs in our library:</h4>
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>Artist</th>
+            <th>Title</th>
+            <th># of Times Added</th>
+            <th>Add to Your Playlist</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if @songs %>
+            <% @songs.each do |song| %>
+                <tr>
+                    <td><%= song.artist %></td>
+                    <td><a href="/songs/<%= song.id %>"><%= song.title %></a></td>
+                    <td><%=  @count.where(song_id: song.id).count %></td>
+                    <td><a class="btn btn-outline-info" href="/playlists/<%= song.id %>" data-method="post">Add</a></td>
+                </tr>
+            <% end %>
+        <% end %>
+    </tbody>
+</table>
+
+<br>
+
+<h4>Add a Song</h4>
+<div class="row">
+    <div class="col-4">
+        <form action="/songs" method="POST">
+            <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+            <div class="form-group">
+                <label for="first_name">Artist:</label>
+                <input class="form-control" type="text" name="song[artist]" id="artist">
+            </div>
+            
+            <div class="form-group">
+                <label for="last_name">Title:</label>
+                <input class="form-control" type="text" name="song[title]" id="title">
+            </div>
+        
+            <input class="btn btn-outline-success" type="submit" value="Add Song">
+        </form>
+    </div>
+</div>
+
